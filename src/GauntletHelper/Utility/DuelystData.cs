@@ -11,7 +11,7 @@ namespace GauntletHelper
     public class DuelystData
     {
         private const string URL = @"https://docs.google.com/document/d/1JKJ5fjvwhchefhJcrQDOgRIwqaDKpj13PRstVyn7mG0/pub";
-        private const int MIN_NAME_DISTANCE = 2; // Currently it calculates MAW as 3 distance for a lot of things, so this prevents that. Might need to change it though.
+        private const int MIN_NAME_DISTANCE = 5; // Going over 2 means nonsense will sometimes match to Maw, but it's necessary for some cards.
 
         public Dictionary<string, int> Factions { get; set; }
         public Dictionary<string, string> Symbols { get; set; }
@@ -122,6 +122,7 @@ namespace GauntletHelper
                 BuildCardNames();
 
             Tuple<string, int> closestName = LevenshteinDistance.ComputeDistance(name, cardNames[faction]);
+            // Console.WriteLine("{0}\t{1}\t{2}", name, closestName.Item1, closestName.Item2);
 
             result = Cards[faction][closestName.Item1];
             return closestName.Item2 <= MIN_NAME_DISTANCE;

@@ -1,5 +1,4 @@
-﻿using Aspose.OCR;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -7,36 +6,26 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tesseract;
 
 namespace GauntletHelper
 {
     public static class OcrUtility
     {
-        private static OcrEngine ocr;
+        private static TesseractEngine tesseract;
 
         static OcrUtility()
         {
-            ocr = new OcrEngine();
+            tesseract = new TesseractEngine("tessdata", "eng", EngineMode.Default, "config");
+            tesseract.SetVariable("tessedit_char_whitelist", "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         }
 
-        public static bool Process(Bitmap bitmap, out string result)
+        public static bool ProcessTesseract(Bitmap bitmap, out string result)
         {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                bitmap.Save(stream, ImageFormat.Png);
-                ocr.Image = ImageStream.FromStream(stream, ImageStreamFormat.Png);
+            using (Tesseract.Page page = tesseract.Process(bitmap, PageSegMode.SingleBlock))
+                result = page.GetText().Trim();
 
-                if (ocr.Process())
-                {
-                    result = ocr.Text.ToString();
-                    return true;
-                }
-                else
-                {
-                    result = string.Empty;
-                    return false;
-                }
-            }
+            return true;
         }
     }
 }

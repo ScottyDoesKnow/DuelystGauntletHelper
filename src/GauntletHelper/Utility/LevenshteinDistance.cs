@@ -18,6 +18,8 @@ namespace GauntletHelper
             string result = string.Empty;
             int minDistance = int.MaxValue;
 
+            s = s.Replace(" ", "").ToUpper(); // Some implementation-specific bullshit
+
             foreach (string t in ts)
             {
                 int distance = ComputeDistance(s, t.Replace(" ", "").ToUpper()); // Some implementation-specific bullshit

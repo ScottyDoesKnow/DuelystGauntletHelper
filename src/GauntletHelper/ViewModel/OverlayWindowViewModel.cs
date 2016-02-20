@@ -124,8 +124,8 @@ namespace GauntletHelper
 
         private DuelystData data;
         private List<CardControlViewModel> cardViewModels = new List<CardControlViewModel>();
-        private Timer timer;
-        private bool updateRunning = false;
+        private Timer placeWindowTimer, updateCardsTimer;
+        private bool updateCardsRunning = false;
 
         public OverlayWindowViewModel(DuelystData duelystData)
         {
@@ -139,25 +139,15 @@ namespace GauntletHelper
             cardViewModels.Add(Card2);
             cardViewModels.Add(Card3);
 
-            timer = new Timer(TimerElapsed, null, 100, 100);
+            placeWindowTimer = new Timer(PlaceWindow, null, 25, 25);
+            updateCardsTimer = new Timer(UpdateCards, null, 1000, 1000);
         }
 
         #region Timer
 
-        private void TimerElapsed(object state)
+        private void PlaceWindow(object state)
         {
             PlaceWindow();
-
-            lock (timer)
-                if (updateRunning)
-                    return;
-                else
-                    updateRunning = true;
-
-            UpdateCards();
-
-            lock (timer)
-                updateRunning = false;
         }
 
         private void PlaceWindow()
@@ -185,6 +175,20 @@ namespace GauntletHelper
                 Visibility = Visibility.Hidden;
         }
 
+        private void UpdateCards(object state)
+        {
+            lock (placeWindowTimer)
+                if (updateCardsRunning)
+                    return;
+                else
+                    updateCardsRunning = true;
+
+            UpdateCards();
+
+            lock (placeWindowTimer)
+                updateCardsRunning = false;
+        }
+
         private void UpdateCards()
         {
             if (Visibility == Visibility.Visible)
@@ -206,7 +210,7 @@ namespace GauntletHelper
                 if (cardNameImage != null)
                 {
                     string imageName;
-                    if (OcrUtility.Process(cardNameImage, out imageName))
+                    if (OcrUtility.ProcessTesseract(cardNameImage, out imageName))
                     {
                         Card result;
                         if (!string.IsNullOrEmpty(imageName) && data.GetCard(SelectedFaction, imageName, out result))
@@ -238,6 +242,8 @@ namespace GauntletHelper
                     else
                         bitmap.SetPixel(w, h, Color.White);
                 }
+
+            // Window.Dispatcher.Invoke(new Action(() => new TestBitmapWindow(bitmap).ShowDialog()));
 
             return bitmap;
         }

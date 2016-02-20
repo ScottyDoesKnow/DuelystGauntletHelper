@@ -243,7 +243,7 @@ namespace GauntletHelper
                         bitmap.SetPixel(w, h, Color.White);
                 }
 
-            // Window.Dispatcher.Invoke(new Action(() => new TestBitmapWindow(bitmap).ShowDialog()));
+            //Window.Dispatcher.Invoke(new Action(() => new TestBitmapWindow(bitmap).ShowDialog()));
 
             return bitmap;
         }

@@ -41,7 +41,7 @@ namespace GauntletHelper
                         {
                             foreach (HtmlNode row in table.SelectNodes("tr").Skip(1))
                             {
-                                string name = row.ChildNodes[0].InnerText;
+                                string name = HtmlEntity.DeEntitize(row.ChildNodes[0].InnerText);
                                 int value = int.Parse(row.ChildNodes[1].InnerText);
 
                                 Factions.Add(name, value);
@@ -52,20 +52,20 @@ namespace GauntletHelper
                         {
                             foreach (HtmlNode row in table.SelectNodes("tr").Skip(1))
                             {
-                                string symbol = row.ChildNodes[0].InnerText;
-                                string description = row.ChildNodes[1].InnerText;
+                                string symbol = HtmlEntity.DeEntitize(row.ChildNodes[0].InnerText);
+                                string description = HtmlEntity.DeEntitize(row.ChildNodes[1].InnerText);
 
                                 // Anal
                                 if (!description.EndsWith("."))
                                     description += ".";
 
-                                Symbols.Add(ReplaceAmp(symbol), description);
+                                Symbols.Add(symbol, description);
                             }
                             break;
                         }
                     default:
                         {
-                            string faction = table.SelectNodes("tr").First().InnerText;
+                            string faction = HtmlEntity.DeEntitize(table.SelectNodes("tr").First().InnerText);
                             faction = faction.Substring(0, faction.IndexOf(" "));
 
                             if (faction != "Rating") // Currently there's a second rating table on the page
@@ -76,16 +76,16 @@ namespace GauntletHelper
                                 {
                                     for (int i = 0; i < 2; i++)
                                     {
-                                        string name = row.ChildNodes[0 + (i * 3)].InnerText;
+                                        string name = HtmlEntity.DeEntitize(row.ChildNodes[0 + (i * 3)].InnerText);
                                         if (!string.IsNullOrEmpty(name))
                                         {
                                             int value;
                                             if (!int.TryParse(row.ChildNodes[1 + (i * 3)].InnerText, out value))
                                                 value = -1;
 
-                                            string symbols = row.ChildNodes[2 + (i * 3)].InnerText;
+                                            string symbols = HtmlEntity.DeEntitize(row.ChildNodes[2 + (i * 3)].InnerText);
 
-                                            Cards[faction].Add(name, new Card(name, value, ReplaceAmp(symbols)));
+                                            Cards[faction].Add(name, new Card(name, value, symbols));
                                         }
                                     }
 
@@ -99,16 +99,14 @@ namespace GauntletHelper
             }
         }
 
-        private static string ReplaceAmp(string input)
-        {
-            return input.Replace("&amp;", "&");
-        }
-
         private static HtmlDocument DownloadPage(string url)
         {
             HtmlDocument doc = new HtmlDocument();
             using (WebClient client = new WebClient())
+            {
+                client.Encoding = Encoding.UTF8; // Otherwise things like apostrophes are encoded wrong
                 doc.LoadHtml(client.DownloadString(url));
+            }
             return doc;
         }
 
@@ -122,7 +120,7 @@ namespace GauntletHelper
                 BuildCardNames();
 
             Tuple<string, int> closestName = LevenshteinDistance.ComputeDistance(name, cardNames[faction]);
-            // Console.WriteLine("{0}\t{1}\t{2}", name, closestName.Item1, closestName.Item2);
+            //Console.WriteLine("{0}\t{1}\t{2}", name, closestName.Item1, closestName.Item2);
 
             result = Cards[faction][closestName.Item1];
             return closestName.Item2 <= MIN_NAME_DISTANCE;

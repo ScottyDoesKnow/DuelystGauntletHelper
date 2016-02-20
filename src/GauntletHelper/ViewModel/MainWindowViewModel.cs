@@ -25,6 +25,8 @@ namespace GauntletHelper
 
         public ObservableCollection<Tuple<string, int>> FactionRatings { get; private set; }
 
+        public string Url { get { return DuelystData.URL; } }
+
         public bool ProgressRunning
         {
             get { return progressRunning; }

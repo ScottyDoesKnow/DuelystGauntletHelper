@@ -10,7 +10,7 @@ namespace GauntletHelper
 {
     public class DuelystData
     {
-        private const string URL = @"https://docs.google.com/document/d/1JKJ5fjvwhchefhJcrQDOgRIwqaDKpj13PRstVyn7mG0/pub";
+        public static readonly string URL = @"https://docs.google.com/document/d/1JKJ5fjvwhchefhJcrQDOgRIwqaDKpj13PRstVyn7mG0/pub";
         private const int MIN_NAME_DISTANCE = 5; // Going over 2 means nonsense will sometimes match to Maw, but it's necessary for some cards.
 
         public Dictionary<string, int> Factions { get; set; }

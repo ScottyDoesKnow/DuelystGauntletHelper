@@ -55,6 +55,10 @@ namespace GauntletHelper
                                 string symbol = row.ChildNodes[0].InnerText;
                                 string description = row.ChildNodes[1].InnerText;
 
+                                // Anal
+                                if (!description.EndsWith("."))
+                                    description += ".";
+
                                 Symbols.Add(ReplaceAmp(symbol), description);
                             }
                             break;

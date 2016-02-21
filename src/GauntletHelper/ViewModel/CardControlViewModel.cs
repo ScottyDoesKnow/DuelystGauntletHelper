@@ -17,6 +17,8 @@ namespace GauntletHelper
 {
     public class CardControlViewModel : ViewModelBase
     {
+        private const int SYMBOLS_WIDTH = 260 - (1 * 2) - (1 * 3); // Control width minus margin and border
+
         #region Binding
 
         public string Rating
@@ -41,6 +43,20 @@ namespace GauntletHelper
         }
         private string symbols;
 
+        /// <summary>
+        /// Needed because the viewbox seems to either resize things to fit when not necessary (resulting in tiny font) or not resize anything.
+        /// </summary>
+        public double SymbolsWidth
+        {
+            get { return symbolsWidth; }
+            set
+            {
+                symbolsWidth = value;
+                RaisePropertyChanged("SymbolsWidth");
+            }
+        }
+        private double symbolsWidth = SYMBOLS_WIDTH;
+
         #endregion
 
         public FrameworkElement CaptureArea { get; set; }
@@ -60,19 +76,21 @@ namespace GauntletHelper
             else
                 Rating = string.Format("{0}: {1}", card.Name, card.Value == -1 ? "Undefined" : card.Value.ToString());
 
+            char[] symbolChars = card.Symbols.ToCharArray();
             string symbols = string.Empty;
-            foreach (char symbol in card.Symbols.ToCharArray())
+            foreach (char symbol in symbolChars)
             {
                 if (!string.IsNullOrEmpty(symbols))
                     symbols += Environment.NewLine;
 
                 if (data.Symbols.ContainsKey(symbol.ToString()))
-                    symbols += "- " + data.Symbols[symbol.ToString()];
+                    symbols += data.Symbols[symbol.ToString()];
                 else
-                    symbols += "- Unknown symbol encountered.";
+                    symbols += "Unknown symbol encountered.";
             }
 
             Symbols = symbols;
+            SymbolsWidth = symbolChars.Length > 2 ? double.NaN : SYMBOLS_WIDTH;
         }
     }
 }

@@ -8,7 +8,9 @@
         <Border Height="115" VerticalAlignment="Top">
             <Border BorderBrush="Black" Background="Black" BorderThickness="3" CornerRadius="10" VerticalAlignment="Stretch">
                 <StackPanel Background="Black" VerticalAlignment="Bottom">
-                    <TextBlock Foreground="White" FontSize="12" TextWrapping="WrapWithOverflow" Text="{Binding Symbols}" />
+                    <Viewbox StretchDirection="DownOnly" Stretch="Uniform">
+                        <TextBlock Foreground="White" FontSize="12" TextWrapping="Wrap" Text="{Binding Symbols}" Width="{Binding SymbolsWidth}" />
+                    </Viewbox>
                     <TextBlock Foreground="White" FontSize="16" HorizontalAlignment="Center" Text="{Binding Rating}" />
                 </StackPanel>
             </Border>

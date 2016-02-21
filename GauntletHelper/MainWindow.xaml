@@ -1,0 +1,41 @@
+﻿<Window x:Class="GauntletHelper.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras"
+        Title="Gauntlet Helper" Width="333" SizeToContent="Height" ResizeMode="CanMinimize" Icon="icon.ico" WindowStartupLocation="CenterScreen" Topmost="True">
+    <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <ComboBox Grid.Row="0" Grid.Column="0" Margin="3"
+                      ItemsSource="{Binding Factions}" SelectedItem="{Binding OverlayWindow.SelectedFaction}" />
+            <CheckBox Grid.Row="0" Grid.Column="1" Margin="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+                      Content="Overlay Visible" IsChecked="{Binding OverlayWindow.AllowVisible}" />
+            <CheckBox Grid.Row="0" Grid.Column="2" Margin="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+                      Content="Windowed" IsChecked="{Binding OverlayWindow.Windowed}" />
+
+            <ProgressBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="3" Height="20"
+                         IsIndeterminate="{Binding ProgressRunning}" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Text="{Binding ProgressText}" />
+
+            <DataGrid Grid.Row="2" Grid.ColumnSpan="3" Margin="3" IsEnabled="False" AutoGenerateColumns="False"
+                      ItemsSource="{Binding FactionRatings}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Faction" Binding="{Binding Item1}" />
+                    <DataGridTextColumn Header="Rating" Binding="{Binding Item2}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </StackPanel>
+</Window>

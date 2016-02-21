@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="GauntletHelper.CardControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             Height="475" Width="260">
+    <StackPanel Margin="1">
+        <Border Height="115" VerticalAlignment="Top">
+            <Border BorderBrush="Black" Background="Black" BorderThickness="3" CornerRadius="10" VerticalAlignment="Stretch">
+                <StackPanel Background="Black" VerticalAlignment="Bottom">
+                    <TextBlock Foreground="White" FontSize="12" TextWrapping="WrapWithOverflow" Text="{Binding Symbols}" />
+                    <TextBlock Foreground="White" FontSize="16" HorizontalAlignment="Center" Text="{Binding Rating}" />
+                </StackPanel>
+            </Border>
+        </Border>
+        <Border x:Name="CaptureArea" BorderBrush="Black" Height="10" Margin="25,128,25,0" />
+    </StackPanel>
+</UserControl>

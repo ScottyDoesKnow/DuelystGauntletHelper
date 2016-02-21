@@ -8,7 +8,6 @@ Gauntlet Tier List and Drafting Guide: https://docs.google.com/document/d/1JKJ5f
 Twitch: http://www.twitch.tv/cynosuregg
 
 **Screenshot**
-
 http://i.imgur.com/0r3lWaV.png
 
 **NuGet Packages Used**
